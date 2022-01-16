@@ -1,0 +1,23 @@
+{% extends 'main/base.html'%}
+
+
+{% block title%}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+    <h1>Будущие темки</h1>
+    {% if tasks %}
+        {% for el in tasks %}
+            {% if el.status == '1' %}
+                <div class="alert alert-warning mt-2">
+                    <h3> {{ el.title}}</h3>
+                    <p>{{ el.task}}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p> Нет темок!</p>
+    {% endif %}
+{% endblock %}
+

@@ -1,3 +1,4 @@
+from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
 from .models import Task
 from django.forms import ModelForm, TextInput, Textarea
 from django.contrib.auth.models import User
@@ -21,45 +22,27 @@ class TaskForm(ModelForm):
         }
 
 
-
-
-
-class RegistrationForm(forms.ModelForm):
-    password1 = forms.CharField(
-        widget=forms.PasswordInput
+class MyLoginForm(AuthenticationForm):
+    username = UsernameField(widget=forms.TextInput(attrs={
+        'autofocus': True,
+        'class': 'form-control'
+    }))
+    password = forms.CharField(label="Password", strip=False, widget=forms.PasswordInput(attrs={
+            'autocomplete': 'current-password',
+            'class': 'form-control'
+        }),
     )
-    password2 = forms.CharField(
-        widget=forms.PasswordInput
-    )
+
+
+class SignUpForm(UserCreationForm):
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={
+        'class': 'form-control'
+    }))
+    password2 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={
+        'class': 'form-control'
+    }))
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
-        widgets ={
-            'username': TextInput(attrs={
-                'class': 'form-control' 'col-sm-6' 'invalid-feedback',
-                'placeholder': 'Username',
-            }),
-            'first_name': TextInput(attrs={
-                'class': 'form-control' 'col-sm-6' 'invalid-feedback',
-                'placeholder': 'First Name',
-            }),
-            'last_name': TextInput(attrs={
-                'class': 'form-control' 'col-sm-6' 'invalid-feedback',
-                'placeholder': 'Last Name',
-            }),
-            'email': TextInput(attrs={
-                'class': 'form-control' 'col-12' 'invalid-feedback',
-                'placeholder': 'email',
-            }),
-
-        }
-
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password1'] != cd['password2']:
-            raise forms.ValidationError('Password don\'t match.')
-        return cd['password2']
-
-
-
+        fields = {'username', 'email'}
+        widgets = {'username': forms.TextInput(attrs={'class': 'form-control'})}
